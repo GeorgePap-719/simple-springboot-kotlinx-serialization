@@ -1,0 +1,3 @@
+package org.apiplayground.apitest.security
+
+public interface ISpringCookieProvider
