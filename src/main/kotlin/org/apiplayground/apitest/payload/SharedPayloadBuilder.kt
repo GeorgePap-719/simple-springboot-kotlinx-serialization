@@ -40,6 +40,7 @@ internal class SharedSharedPayloadFromBuilder : SharedPayloadBuilder, SharedPayl
     @Transient
     private var hasStatus = false
 
+    @Transient
     private var mHeaders: HashMap<String, String> = hashMapOf()
 
     @Serializable(with = AnySerializer::class)
@@ -47,6 +48,8 @@ internal class SharedSharedPayloadFromBuilder : SharedPayloadBuilder, SharedPayl
         private set
     override var error: ApiError? = null
         private set
+
+    @Transient
     override var mHttpStatus: HttpStatus = HttpStatus.OK
         private set
 

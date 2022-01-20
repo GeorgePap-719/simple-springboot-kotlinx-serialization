@@ -14,7 +14,6 @@ public sealed interface SharedPayload {
     public val mHttpStatus: HttpStatus
 }
 
-
 public fun SharedPayload.asString(): String = "data:$data, error:$error"
 
 public interface PayloadReader<M : SharedPayload> {

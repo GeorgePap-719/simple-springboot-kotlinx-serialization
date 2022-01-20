@@ -1,7 +1,12 @@
+@file:OptIn(InternalSerializationApi::class)
+
 package org.apiplayground.apitest
 
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.serializer
 import org.apiplayground.apitest.handler.PingHandler
 import org.apiplayground.apitest.payload.ApiResponse
+import org.apiplayground.apitest.payload.SharedPayload
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
