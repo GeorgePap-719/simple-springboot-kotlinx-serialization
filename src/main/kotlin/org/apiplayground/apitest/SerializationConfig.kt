@@ -15,12 +15,9 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies
 
 @Configuration
 class SerializationConfig {
-    @Bean
-    fun json(): Json = Json {
-        serializersModule = sharedPayloadModule
 
-        explicitNulls = false
-    }
+    @Bean
+    fun json(): Json = Json
 
     @Bean
     fun kotlinSerializationJsonEncoder(json: Json): KotlinSerializationJsonEncoder =
