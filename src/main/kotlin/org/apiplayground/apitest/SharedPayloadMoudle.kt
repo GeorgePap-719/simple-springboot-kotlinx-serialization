@@ -32,3 +32,4 @@ public val apiResponseModule: SerializersModule = SerializersModule {
 }
 
 public val SharedPayloadJson: Json = Json { serializersModule = sharedPayloadModule }
+

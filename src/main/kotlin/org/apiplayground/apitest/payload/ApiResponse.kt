@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus
  * Has almost no overhead over call to [SharedPayload] constructor.
  */
 public fun ApiResponse(
-    data: Any?,
+    data: String?,
     error: ApiError? = null,
     mHttpStatus: HttpStatus = HttpStatus.OK,
     mHeaders: HashMap<String, String> = HashMap()

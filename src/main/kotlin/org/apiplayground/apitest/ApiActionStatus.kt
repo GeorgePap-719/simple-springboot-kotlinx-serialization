@@ -1,16 +1,20 @@
 package org.apiplayground.apitest
 
+import kotlinx.serialization.Serializable
 import org.springframework.http.HttpStatus
 
+@Serializable
 public sealed class ApiActionStatus(public val value: HttpStatus) {
 
     /* Used when the action request was received and execution is pending */
     public data class OperationPending(val status: HttpStatus = HttpStatus.OK) : ApiActionStatus(status)
 
     /* Used when the action succeeds */
+    @Serializable
     public data class OperationSuccessStatus(val status: HttpStatus = HttpStatus.OK) : ApiActionStatus(status)
 
     /* Used when the action didn't produce an error but didn't really have any other effect either */
+    @Serializable
     public data class OperationFailedStatus(val status: HttpStatus = HttpStatus.OK) : ApiActionStatus(status)
 
     /* Used when the action needs authorization or higher privilege level */

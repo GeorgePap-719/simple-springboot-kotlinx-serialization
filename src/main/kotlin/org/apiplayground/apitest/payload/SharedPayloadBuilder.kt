@@ -5,11 +5,12 @@ import org.apiplayground.apitest.errors.ApiError
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.json.Json
 import org.apiplayground.apitest.AnySerializer
 import org.springframework.http.HttpStatus
 
 public sealed interface SharedPayloadBuilder {
-    public fun data(value: Any)
+    public fun data(value: String)
     public fun error(value: ApiError)
     public fun httpStatus(status: HttpStatus)
     public fun headers(headers: HashMap<String, String>)
@@ -24,6 +25,7 @@ public inline fun buildSharedPayload(block: SharedPayloadBuilder.() -> Unit): Sh
         throw t
     }
 }
+
 
 @PublishedApi
 @Serializable
@@ -43,8 +45,7 @@ internal class SharedSharedPayloadFromBuilder : SharedPayloadBuilder, SharedPayl
     @Transient
     private var mHeaders: HashMap<String, String> = hashMapOf()
 
-    @Serializable(with = AnySerializer::class)
-    override var data: Any? = hashMapOf<String, String?>()
+    override var data: String? = null
         private set
     override var error: ApiError? = null
         private set
@@ -53,7 +54,7 @@ internal class SharedSharedPayloadFromBuilder : SharedPayloadBuilder, SharedPayl
     override var mHttpStatus: HttpStatus = HttpStatus.OK
         private set
 
-    override fun data(value: Any) {
+    override fun data(value: String) {
         if (hasData) {
             error("Data already provided")
         }
@@ -90,3 +91,4 @@ internal class SharedSharedPayloadFromBuilder : SharedPayloadBuilder, SharedPayl
         return this
     }
 }
+

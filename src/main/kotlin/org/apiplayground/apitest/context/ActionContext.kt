@@ -2,6 +2,7 @@ package org.apiplayground.apitest.context
 
 
 
+import kotlinx.serialization.Serializable
 import org.apiplayground.apitest.ApiActionStatus
 import org.apiplayground.apitest.ApiActionStatus.*
 import org.apiplayground.apitest.security.ISpringCookieProvider
@@ -12,9 +13,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.http.server.reactive.ServerHttpResponse
 
-
+@Serializable
 public class ActionContext {
-    public var data: Any? = null
+    public var data: String? = null
     public var error: ApiError? = null
     private var contextHasBeenSet = false
     public val headers: MutableList<ISpringHeaderProvider> = mutableListOf()
