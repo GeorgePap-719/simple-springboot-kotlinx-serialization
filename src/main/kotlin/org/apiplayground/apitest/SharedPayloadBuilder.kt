@@ -1,16 +1,18 @@
-package org.apiplayground.apitest.payload
+package org.apiplayground.apitest
 
-import kotlinx.serialization.Contextual
-import org.apiplayground.apitest.errors.ApiError
+
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.json.Json
-import org.apiplayground.apitest.AnySerializer
+import kotlinx.serialization.json.JsonElement
+import org.apiplayground.apitest.erros.ApiError
+import org.apiplayground.apitest.erros.cast
+import org.apiplayground.apitest.erros.encodeToString
 import org.springframework.http.HttpStatus
 
 public sealed interface SharedPayloadBuilder {
-    public fun data(value: String)
+    // this should not be nullable
+    public fun data(value: JsonElement?)
     public fun error(value: ApiError)
     public fun httpStatus(status: HttpStatus)
     public fun headers(headers: HashMap<String, String>)
@@ -25,6 +27,11 @@ public inline fun buildSharedPayload(block: SharedPayloadBuilder.() -> Unit): Sh
         throw t
     }
 }
+
+public fun SharedPayloadBuilder.data(value: Data): Unit = data(value.value.encodeToJsonElement())
+internal inline fun <reified T> SharedPayloadBuilder.data(value: T): Unit = data(value.encodeToJsonElement())
+
+public fun SharedPayloadBuilder.error(value: ApiError): Unit = error(value.cast().encodeToString())
 
 
 @PublishedApi
@@ -43,18 +50,21 @@ internal class SharedSharedPayloadFromBuilder : SharedPayloadBuilder, SharedPayl
     private var hasStatus = false
 
     @Transient
-    private var mHeaders: HashMap<String, String> = hashMapOf()
-
-    override var data: String? = null
-        private set
-    override var error: ApiError? = null
-        private set
-
-    @Transient
     override var mHttpStatus: HttpStatus = HttpStatus.OK
         private set
 
-    override fun data(value: String) {
+    @Transient
+    @Deprecated("No longer used.")
+    private var mHeaders: HashMap<String, String> = hashMapOf()
+
+    @Polymorphic
+    override var data: JsonElement? = null
+        private set
+
+    override var error: ApiError? = null
+        private set
+
+    override fun data(value: JsonElement?) {
         if (hasData) {
             error("Data already provided")
         }
@@ -87,8 +97,7 @@ internal class SharedSharedPayloadFromBuilder : SharedPayloadBuilder, SharedPayl
     }
 
     fun build(): SharedPayload {
-        check(hasData) { "Data is required" }
+        check(hasData || hasErrors) { "Data or error is required" }
         return this
     }
 }
-

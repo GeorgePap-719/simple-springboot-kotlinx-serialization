@@ -1,4 +1,4 @@
-package org.apiplayground.apitest.errors
+package org.apiplayground.apitest.erros
 
 import kotlinx.serialization.Serializable
 import org.springframework.http.HttpStatus
